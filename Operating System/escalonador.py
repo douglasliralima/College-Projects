@@ -54,26 +54,59 @@ def SJF(processos):
 
 	#Vamos ver o tempo máximo de chegada dos processos que representa no instante máximo do dicionário
 	ordem = []
+	filaProntos = []
+	filaProcessos = []
+	prontos = False
 	executando = 0
 	tempoAtual = 0
 	for i in range(int(max(processos.keys())) + 1):
+		tempoAtual += 1 #Tempo atual atualiza para o novo instante
 		#Vamos jogar todos os processos em uma lista
 		if str(i) in processos.keys():
 			ordem += processos[str(i)]
 			ordem.sort()
 			print(ordem)
-			#Se no instante que aquele processo entrou não há nada no processador, ele é executado
-			if tempoAtual <= i:
-			#Executa
-				tEspera.append(tempoAtual - i)
-				tResposta.append(tempoAtual - i)
-				tRetorno.append(ordem[0] + tempoAtual) #Tem que pensar onde por isso
-				tempoAtual += ordem[0]
-				executando = ordem[0]
-				del(ordem[0])
+			#Se no instante que aquele processo entrou não há nada no processador(instante 0), ele é executado
+			if tempoAtual == 0:
+				#Executa
+				execucao = ordem[0]#Guardamos o processo que vamos executar
+				tempoExecucao = ordem[0] + tempoAtual #E o tempo total que demoraria para executar
+				tEspera.append(tempoAtual)
+				tResposta.append(tempoAtual)
+				tRetorno.append(ordem[0] + tempoAtual) #Guardamos o possível tempo de retorno que demoraria esse processo
+				del(ordem[0]) #Processo sai da fila de processos para entrar no processador
 
 			#Verificamos se aquele processo que estaria no processador n é maior que o atual que acabou de entrar
-			#elif (executando - i) > ordem[0] :
+			elif (execucao - i) > ordem[0]:
+				#Há processos na fila de prontos 
+				if prontos == True:
+					#Logo vamos ver se aquele que seria executado agora é o que está na fila de prontos
+					if ordem[0] in filaProntos:
+						#Vamos pegar o indice daquele processo que vai voltar
+						p = tRetorno.index(tempoExecucao)
+
+						#Atualização da fila de prontos
+						filaProcessos.append(tempoExecucao)
+		 				filaProntos.append(execucao - i)
+						prontos = True
+
+				else: #Primeira vez que entra nesse laço
+					p = tRetorno.index(tempoExecucao)
+					#Atualização da fila de prontos
+					filaProcessos.append(tempoExecucao)
+	 				filaProntos.append(execucao - i)
+					prontos = True
+					#Executa
+					execucao = ordem[0]#Guardamos o processo que vamos executar
+					tempoExecucao = ordem[0] + tempoAtual #E o tempo total que demoraria para executar
+					tEspera.append(tempoAtual)	
+					tResposta.append(tempoAtual)
+					tRetorno.append(ordem[0] + tempoAtual)
+					del(ordem[0]) #Processo sai da fila de espera em ordem, pois está executando
+					ordem.append(execucao - i) #Processo anterior foi executado até o instante atual é guardado na fila de prontos
+			
+
+
 
 
 
