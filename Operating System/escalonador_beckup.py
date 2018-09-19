@@ -30,6 +30,7 @@ def FCFS(processos):
     tRetorno = [] #Quando processo finaliza
     tEspera = [] #Enquanto o processo está esperando
 
+    
     tTotal = 0
     for i in processos.values():
         tTotal += sum(i)
@@ -39,6 +40,7 @@ def FCFS(processos):
     instanteEntrada = {}
     nProc = 0 #Vamos já considerar o primeiro processo que vai entrar
     for tempoAtual in range(tTotal + 10): #+1 pelo instante 0 ser contado
+        print("segundo:", tempoAtual)
         if tempoAtual in processos.keys():
             #Vamos receber e ordenar os processo que entram
             fila += processos[tempoAtual]
@@ -54,6 +56,7 @@ def FCFS(processos):
             for instantes in processos.keys():
                 if fila[0] in processos[instantes]:
                     instante_inicial = instantes
+                    print("instantes",instante_inicial)
             proc = processo(fila[0], instante_inicial)
             proc.iniciaProcesso(tempoAtual, instanteEntrada[fila[0]])
             del(fila[0])
@@ -69,8 +72,11 @@ def FCFS(processos):
                 tEspera.append(z)
                 nProc -= 1
                 cpu = False
+        print('nProc', nProc)
 
-    return np.mean(tRetorno), np.mean(tResposta), np.mean(tEspera)
+    print('Retorno', tRetorno, "Resposta:", tResposta, 'Espera', tEspera, sep = '\n')
+    print('Retorno', np.mean(tRetorno), "Resposta:", np.mean(tResposta),'Espera', np.mean(tEspera), sep = '\n')
+
 
 def SJF(processos):
     tResposta = [] #Primeira vez que o processo é startado
@@ -87,6 +93,7 @@ def SJF(processos):
     instanteEntrada = {}
     nProc = 0 #Vamos já considerar o primeiro processo que vai entrar
     for tempoAtual in range(tTotal + 10): #+1 pelo instante 0 ser contado
+        print("segundo:", tempoAtual)
         if tempoAtual in processos.keys():
             #Vamos receber e ordenar os processo que entram
             fila += processos[tempoAtual]
@@ -103,6 +110,7 @@ def SJF(processos):
             for instantes in processos.keys():
                 if fila[0] in processos[instantes]:
                     instante_inicial = instantes
+                    print("instantes",instante_inicial)
             proc = processo(fila[0], instante_inicial)
             proc.iniciaProcesso(tempoAtual, instanteEntrada[fila[0]])
             del(fila[0])
@@ -118,8 +126,10 @@ def SJF(processos):
                 tEspera.append(z)
                 nProc -= 1
                 cpu = False
+        print('nProc', nProc)
 
-    return np.mean(tRetorno), np.mean(tResposta), np.mean(tEspera)
+    print('Retorno', tRetorno, "Resposta:", tResposta, 'Espera', tEspera, sep = '\n')
+    print('Retorno', np.mean(tRetorno), "Resposta:", np.mean(tResposta),'Espera', np.mean(tEspera), sep = '\n')
 
 def RR(processos):
     tResposta = [] #Primeira vez que o processo é startado
@@ -138,6 +148,7 @@ def RR(processos):
     quantum = 1
     nProc = 0 #Vamos já considerar o primeiro processo que vai entrar
     for tempoAtual in range(tTotal): #+1 pelo instante 0 ser contado
+        print("segundo:", tempoAtual)
 
         if tempoAtual in processos.keys():
             #Vamos receber e ordenar os processo que entram
@@ -147,32 +158,41 @@ def RR(processos):
             #Guardamos o momento que aquele processo entrou na fila de espera
             for i in processos[tempoAtual]:
                 instanteEntrada[i] = tempoAtual
+        #print(fila)
 
 
 
         #Verificação quanto ao tempo daquele processo
+        #print('quantum:', quantum)
         if quantum == 0:
+            #print("pop processo")
             j += 1
             proc.pausaProcesso(tempoAtual)
             fila.append(proc)
             cpu = False
+        #print('nProc', nProc)
 
 
         if cpu == False and nProc > 0:
             quantum = 1 #Segundo inicial já é uma execução e o segundo é 0
+            #print("entrou no if", "cpu:", cpu, "nProc:", nProc)
             #Se tiver guardado na fila apenas o tempo de pico, executamos o código abaixo
             if type(fila[0]) == type(int()):
                 instante_inicial = 0
                 for instantes in processos.keys():
                     if fila[0] in processos[instantes]:
                         instante_inicial = instantes
+                        print("instantes",instante_inicial)
                 proc = processo(fila[0], instante_inicial)
+                print("-------------Processo inicializado:", proc.get_primeira_vez())
                 proc.iniciaProcesso(tempoAtual, instanteEntrada[fila[0]])
                 del(fila[0])
                 cpu = True
             #Se o próprio processo estiver na fila, executamos o código abaixo
             else:
                 proc = fila.pop(0)
+                print("-------------Processo reiniciado:", proc.get_primeira_vez())
+                print("-------------Quantum:", quantum, "Tempo de pico atual:", proc.get_cpu())
                 proc.reiniciaProcesso(tempoAtual)
 
                 cpu = True
@@ -182,6 +202,7 @@ def RR(processos):
             executado = proc.executaProcesso()
             if executado == False:
                 x, y, z = proc.finalizaProcesso(tempoAtual)
+                #print("*********Quantum:", quantum,"Processo:", proc.get_primeira_vez())
                 tResposta.append(x)
                 tRetorno.append(y)
                 tEspera.append(z)
@@ -191,20 +212,13 @@ def RR(processos):
 
             else:
                 quantum -= 1
-                        
-
-    return np.mean(tRetorno), np.mean(tResposta), np.mean(tEspera)
 
 
-
+    print('Retorno', tRetorno, "Resposta:", tResposta, 'Espera', tEspera, sep = '\n')
+    print('Retorno', np.mean(tRetorno), "Resposta:", np.mean(tResposta),'Espera', np.mean(tEspera), sep = '\n')
 
 
 processos = leArquivo()
-tRetorno, tResposta, tEspera = FCFS(processos)
-print('FCFS', tRetorno, tResposta, tEspera)
-
-tRetorno, tResposta, tEspera = SJF(processos)
-print('SJF', tRetorno, tResposta, tEspera)
-
-tRetorno, tResposta, tEspera = RR(processos)
-print('RR', tRetorno, tResposta, tEspera)
+#FCFS(processos)
+#SJF(processos)
+RR(processos)
