@@ -1,5 +1,5 @@
 import os
-import numpy as np
+#import numpy as np
 from processo import processo
 #Implementar algoritmos de escalonamento(FCFS, SJF, RR)
 #Ler processos com seus respectivos, tempos de chegado e de duração 
@@ -155,7 +155,6 @@ def RR(processos):
 		#print('quantum:', quantum)
 		if quantum == 0:
 			#print("pop processo")
-			print("=========================Ciclo", j, "====================", sep = "")
 			j += 1
 			proc.pausaProcesso(tempoAtual)
 			fila.append(proc)
@@ -200,7 +199,7 @@ def RR(processos):
 			
 
 	print('Retorno', tRetorno, "Resposta:", tResposta, 'Espera', tEspera, sep = '\n')
-	print('Retorno', np.mean(tRetorno), "Resposta:", np.mean(tResposta),'Espera', np.mean(tEspera), sep = '\n')
+	#print('Retorno', np.mean(tRetorno), "Resposta:", np.mean(tResposta),'Espera', np.mean(tEspera), sep = '\n')
 
 
 processos = leArquivo()

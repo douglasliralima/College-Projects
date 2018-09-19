@@ -53,6 +53,7 @@ class processo:
 		self.instante_entrada = instante_atual
 
 	def finalizaProcesso(self, instante_atual):
+
 		self.tRetorno = (instante_atual - self.instante_inicial) + 1
-		print("********************retorno:", self.tRetorno)
+		print("********************retorno:", self.tRetorno,"Instante atual:", instante_atual, "Instante Inicial", self.instante_inicial)
 		return self.tResposta, self.tRetorno, self.tEspera
