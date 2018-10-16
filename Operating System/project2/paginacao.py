@@ -53,10 +53,11 @@ def OTM(Ram, tamRam, paginas):
     miss = 0
     cheio = False
     paginasAux = paginas.copy()
+    tempos = {}
     for i in paginas:
         paginasAux.pop(0)  
-        print(Ram, paginasAux)
         if i in Ram:
+            print("Repetiu", Ram, "\nPáginas para deletar:", paginasAux)
             continue
         #Vai encher a Ram
         elif cheio == False:
@@ -65,6 +66,7 @@ def OTM(Ram, tamRam, paginas):
             pos+=1
             
             if pos == tamRam:
+                pos = 0
                 cheio = True
         #Após a Ram estar cheia
         else:
@@ -73,26 +75,38 @@ def OTM(Ram, tamRam, paginas):
             chamado, o que mais demorar será substituido
             '''
             miss += 1
-            pos = 0 #Volta ao inicio
+            posAux = 0 #Volta ao inicio
             posMaior = 0
             maiorDemora = 0
             demora = 0
             #Para cada elemento da Ram
             for j in Ram:
-                #Verificamos o quanto ele demora para aparecer novamente
+                #Primeiro verificamos se aquele elemento aparece novamente na lista
+                #Se o elemento não for aparecer mais, consideramos que o seu tempo de espera é
+                #infinito, então vamos em FIFO, removendo aqueles que foram colocados 
+                #primeiro, mas não aparecerão mais
+                if j not in paginasAux:
+                    posMaior = Ram.index(j)
+                    
+                    continue
+                #Verificamos o quanto ele demora para aparecer novamente, caso esteja na lista
                 for k in paginasAux:
                     demora += 1
                     if j == k:
                         break
+                    
                 #Se acharmos algum elemento que demora > 0, ele passa a ser o mais demorado
                 if maiorDemora < demora:
                     maiorDemora = demora
-                    posMaior = pos
+                    posMaior = posAux
                     
-                if pos + 1 != tamRam:
-                    pos += 1
-            Ram[pos] = i
+                if posAux + 1 != tamRam:
+                    posAux += 1
+            Ram[posMaior] = i
+            pos = posMaior #O atual elemento que foi inserido passa a ser o mais atual
+        print("Miss", Ram, "\nPáginas para deletar:", paginasAux)
     return miss
+
                 
                 
 
