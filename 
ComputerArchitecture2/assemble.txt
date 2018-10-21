@@ -1,0 +1,48 @@
+main:
+add $s0, $zero, 0
+tam $s1
+jal BubbleSort
+exit
+InicializaLista:
+add $t0, $zero, 10
+add $t1, $zero, 9
+add $t2, $zero, 8
+add $t3, $zero, 7
+sw $t0, 0($s0)
+sw $t1, 4($s0)
+sw $t2, 8($s0)
+sw $t3, 12($s0)
+add $t0, $zero, 6
+add $t1, $zero, 5
+add $t2, $zero, 4
+add $t3, $zero, 3
+sw $t0, 16($s0)
+sw $t1, 20($s0)
+sw $t2, 24($s0)
+sw $t3, 28($s0)
+add $s1, $zero, 7
+jr $ra
+BubbleSort:
+while1:
+add $s2, $zero, 1
+add $s3, $zero, 0
+while2:
+sll $t0, $s3, 2
+add $t1, $s0, $t0
+add $t0, $t0, 4
+add $t2, $s0, $t0
+lw $t3, 0($t1)
+lw $t4, 0($t2)
+slt $t0, $t3, $t4
+bnq $t0, $zero, loop
+sw $t4, 0($t1)
+sw $t3, 0($t2)
+add $s2, $zero, 0
+loop:
+add $s3, $s3, 1
+add $t0, $s1, -1
+slt $t1, $s3, $t0
+bnq $t1, $zero, while2
+slt $t1, $s2, 1
+bnq $t1, $zero, while1
+jr $ra

@@ -1,0 +1,65 @@
+Roteiro Cache
+
+Cache de tamanho:
+1
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+2
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+4
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+8
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+16
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+32
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+64
+Conjunto:
+1
+2
+4
+8
+
+Cache de tamanho:
+128
+Conjunto:
+1
+2
+4
+8
